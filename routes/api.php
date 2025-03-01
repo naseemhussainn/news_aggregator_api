@@ -29,4 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Authentication
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    // Article Routes
+    Route::get('/articles', [ArticleController::class, 'index']);
+    Route::get('/articles/{id}', [ArticleController::class, 'show']);
+    Route::get('/feed', [ArticleController::class, 'personalizedFeed']);
 });
