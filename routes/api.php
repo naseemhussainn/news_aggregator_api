@@ -33,4 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/articles', [ArticleController::class, 'index']);
     Route::get('/articles/{id}', [ArticleController::class, 'show']);
     Route::get('/feed', [ArticleController::class, 'personalizedFeed']);
+
+    // User Preferences
+    Route::get('/preferences', [UserPreferenceController::class, 'index']);
+    Route::post('/preferences/sources', [UserPreferenceController::class, 'setSources']);
+    Route::post('/preferences/categories', [UserPreferenceController::class, 'setCategories']);
+    Route::post('/preferences/authors', [UserPreferenceController::class, 'setAuthors']);
+
 });
