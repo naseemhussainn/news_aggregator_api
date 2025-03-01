@@ -42,4 +42,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+        /**
+     * Get the user's preferred sources.
+     */
+    public function preferredSources()
+    {
+        return $this->belongsToMany(Source::class, 'user_preferences', 'user_id', 'preference_id')
+            ->where('preference_type', 'source');
+    }
+    
+    /**
+     * Get the user's preferred categories.
+     */
+    public function preferredCategories()
+    {
+        return $this->belongsToMany(Category::class, 'user_preferences', 'user_id', 'preference_id')
+            ->where('preference_type', 'category');
+    }
+    
+    /**
+     * Get the user's preferred authors.
+     */
+    public function preferredAuthors()
+    {
+        return $this->belongsToMany(Author::class, 'user_preferences', 'user_id', 'preference_id')
+            ->where('preference_type', 'author');
+    }
 }
