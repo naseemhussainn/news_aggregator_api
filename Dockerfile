@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    cron 
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -28,6 +29,12 @@ COPY . .
 # Install dependencies
 RUN composer install
 
+# Copy cron job file
+COPY ./docker/cronjob /etc/cron.d/laravel-cron
+RUN chmod 0644 /etc/cron.d/laravel-cron && crontab /etc/cron.d/laravel-cron
+
+# Ensure cron runs in the background with PHP-FPM
+CMD cron && php-fpm
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
-CMD ["php-fpm"]
