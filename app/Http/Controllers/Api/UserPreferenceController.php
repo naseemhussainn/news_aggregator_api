@@ -13,10 +13,34 @@ use Illuminate\Support\Facades\Validator;
 class UserPreferenceController extends Controller
 {
     /**
-     * Get all user preferences.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *     path="/api/preferences",
+     *     summary="Get all user preferences",
+     *     tags={"User Preferences"},
+     *     security={{"sanctum": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User preferences retrieved successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="sources",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Source")
+     *             ),
+     *             @OA\Property(
+     *                 property="categories",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Category")
+     *             ),
+     *             @OA\Property(
+     *                 property="authors",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Author")
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function index(Request $request)
     {
@@ -30,10 +54,43 @@ class UserPreferenceController extends Controller
     }
     
     /**
-     * Set user preferences for sources.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/preferences/sources",
+     *     summary="Set user preferences for sources",
+     *     tags={"User Preferences"},
+     *     security={{"sanctum": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"source_ids"},
+     *             @OA\Property(
+     *                 property="source_ids",
+     *                 type="array",
+     *                 @OA\Items(type="integer")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Source preferences updated successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Source preferences updated successfully"),
+     *             @OA\Property(
+     *                 property="sources",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Source")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object", example={"source_ids": {"The source_ids field is required."}})
+     *         )
+     *     )
+     * )
      */
     public function setSources(Request $request)
     {
@@ -69,10 +126,43 @@ class UserPreferenceController extends Controller
     }
     
     /**
-     * Set user preferences for categories.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/preferences/categories",
+     *     summary="Set user preferences for categories",
+     *     tags={"User Preferences"},
+     *     security={{"sanctum": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"category_ids"},
+     *             @OA\Property(
+     *                 property="category_ids",
+     *                 type="array",
+     *                 @OA\Items(type="integer")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Category preferences updated successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Category preferences updated successfully"),
+     *             @OA\Property(
+     *                 property="categories",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Category")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object", example={"category_ids": {"The category_ids field is required."}})
+     *         )
+     *     )
+     * )
      */
     public function setCategories(Request $request)
     {
@@ -108,10 +198,43 @@ class UserPreferenceController extends Controller
     }
     
     /**
-     * Set user preferences for authors.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/preferences/authors",
+     *     summary="Set user preferences for authors",
+     *     tags={"User Preferences"},
+     *     security={{"sanctum": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"author_ids"},
+     *             @OA\Property(
+     *                 property="author_ids",
+     *                 type="array",
+     *                 @OA\Items(type="integer")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Author preferences updated successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Author preferences updated successfully"),
+     *             @OA\Property(
+     *                 property="authors",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Author")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object", example={"author_ids": {"The author_ids field is required."}})
+     *         )
+     *     )
+     * )
      */
     public function setAuthors(Request $request)
     {
