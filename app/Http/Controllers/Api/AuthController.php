@@ -14,10 +14,37 @@ use Illuminate\Validation\Rules\Password as PasswordRule;
 class AuthController extends Controller
 {
     /**
-     * Register a new user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/register",
+     *     summary="Register a new user",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "email", "password"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="Password123!"),
+     *             @OA\Property(property="password_confirmation", type="string", format="password", example="Password123!")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User registered successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User registered successfully"),
+     *             @OA\Property(property="user", type="object", ref="#/components/schemas/User"),
+     *             @OA\Property(property="token", type="string", example="1|abcdef123456")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object", example={"email": {"The email field is required."}})
+     *         )
+     *     )
+     * )
      */
     public function register(Request $request)
     {
@@ -54,10 +81,42 @@ class AuthController extends Controller
     }
     
     /**
-     * Login a user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="Login a user",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="Password123!")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Logged in successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Logged in successfully"),
+     *             @OA\Property(property="user", type="object", ref="#/components/schemas/User"),
+     *             @OA\Property(property="token", type="string", example="1|abcdef123456")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Invalid login credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Invalid login credentials")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object", example={"email": {"The email field is required."}})
+     *         )
+     *     )
+     * )
      */
     public function login(Request $request)
     {
@@ -87,10 +146,19 @@ class AuthController extends Controller
     }
     
     /**
-     * Logout a user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/logout",
+     *     summary="Logout a user",
+     *     tags={"Authentication"},
+     *     security={{"sanctum": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Logged out successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Logged out successfully")
+     *         )
+     *     )
+     * )
      */
     public function logout(Request $request)
     {
@@ -102,10 +170,39 @@ class AuthController extends Controller
     }
     
     /**
-     * Request a password reset link.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/forgot-password",
+     *     summary="Request a password reset link",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password reset link sent",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="We have emailed your password reset link.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Unable to send reset link",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="We can't find a user with that email address.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object", example={"email": {"The email field is required."}})
+     *         )
+     *     )
+     * )
      */
     public function forgotPassword(Request $request)
     {
@@ -129,10 +226,42 @@ class AuthController extends Controller
     }
     
     /**
-     * Reset the password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *     path="/api/reset-password",
+     *     summary="Reset the password",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"token", "email", "password", "password_confirmation"},
+     *             @OA\Property(property="token", type="string", example="valid-reset-token"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="NewPassword123!"),
+     *             @OA\Property(property="password_confirmation", type="string", format="password", example="NewPassword123!")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password reset successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Your password has been reset.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Unable to reset password",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="This password reset token is invalid.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object", example={"password": {"The password field is required."}})
+     *         )
+     *     )
+     * )
      */
     public function resetPassword(Request $request)
     {
