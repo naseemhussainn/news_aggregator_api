@@ -5,16 +5,32 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserPreferenceController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+/**
+ * @OA\Info(
+ *     title="News Aggregator API",
+ *     version="1.0.0",
+ *     description="API for managing news articles and user preferences",
+ *     @OA\Contact(
+ *         email="naseemhussain9696@gmail.com"
+ *     ),
+ *     @OA\License(
+ *         name="MIT",
+ *         url="https://opensource.org/licenses/MIT"
+ *     )
+ * )
+ *
+ * @OA\Server(
+ *     url="http://localhost:8000/api",
+ *     description="Local development server"
+ * )
+ *
+ * @OA\SecurityScheme(
+ *     securityScheme="sanctum",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT"
+ * )
+ */
 
 // Authentication Routes
 Route::post('/register', [AuthController::class, 'register']);
